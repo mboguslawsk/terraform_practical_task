@@ -66,8 +66,10 @@ resource "google_compute_backend_service" "default" {
   port_name             = "http" # must match MIG named_port
   load_balancing_scheme = "EXTERNAL"
   timeout_sec           = 10
-  enable_cdn            = true
+  enable_cdn            = false
   health_checks         = [google_compute_health_check.default.id]
+
+  security_policy = google_compute_security_policy.allow_38_only.id
 
   backend {
     group           = google_compute_instance_group_manager.default.instance_group
@@ -144,16 +146,32 @@ resource "google_compute_firewall" "default" {
   target_tags = ["allow-health-check"]
 }
 
-resource "google_compute_firewall" "allow_users_limit" {
-  name          = "${var.prefix_name}-xlb-fw-allow-users-lim"
-  direction     = "INGRESS"
-  network       = var.net
-  
-  allow {
-    protocol = "tcp"
-    ports = ["80"]
+resource "google_compute_security_policy" "allow_38_only" {
+  name = "${var.prefix_name}-allow-38-only"
+
+  description = "Allow specific traffic"
+
+  rule {
+    action   = "allow"
+    priority = "1000"
+    match {
+      versioned_expr = "SRC_IPS_V1"
+      config {
+        src_ip_ranges = ["37.0.0.0/8"]
+      }
+    }
+    description = "Allow access to IPs in 37.0.0.0/8"
   }
 
-  source_ranges = ["37.0.0.0/8"]
-  target_tags = ["web-vms"]
+  rule {
+    action   = "deny(403)"
+    priority = "2147483647"
+    match {
+      versioned_expr = "SRC_IPS_V1"
+      config {
+        src_ip_ranges = ["*"]
+      }
+    }
+    description = "default rule: deny all"
+  }
 }

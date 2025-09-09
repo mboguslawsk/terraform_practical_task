@@ -70,7 +70,16 @@ After refreshing the page (the request is handled by another VM in the MIG):
   <img src="img/img3.png" alt="Website served from VM2" width="70%">
 </p>
 
+---
+
 ## Notes
 
-* In the **compute module** (`modules/compute/main.tf`), a firewall rule was created that only allows access to the website from IP addresses in the range:
-  **37.0.0.0/8**
+* **Restricting traffic with firewall rules:**
+  Regular firewall rules cannot effectively restrict access in this setup. This is because the VMs are in the backend, but all traffic goes through the **external load balancer**.
+  To control incoming traffic, you need to use **security policies** attached to the Load Balancer itself.
+
+* **Rules in the Cloud Armor policy implemented:**
+
+  1. Deny all incoming traffic (`*`) by default.
+  2. Allow traffic only from a specific IP range: **37.0.0.0/8**.
+
