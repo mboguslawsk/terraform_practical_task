@@ -47,23 +47,27 @@ The website runs on the **Apache HTTP server** (port 80).
 
 ## Results
 
-As a result we get output like this:
+After applying the configuration, Terraform outputs look like this:
 
+```hcl
 Outputs:
 
-bucket_name = "bm2-9766b2-tfstate-bucket"
+bucket_name     = "bm2-9762-tfstate-bucket"
 load_balancer_ip = "31.32.33.34"
+```
+* `bucket_name` → Name of the Cloud Storage bucket used for the remote Terraform state.
+* `load_balancer_ip` → Public IP address of the external HTTP load balancer.
 
-Using provided IP address we can connect to the web-site and se load balancer in action:
+Using the provided IP address, we can connect to the website and observe the load balancer in action:
 
 <p align="center">
-  <img src="img/img2.png" alt="Web1" width="70%">
+  <img src="img/img2.png" alt="Website served from VM1" width="70%">
 </p>
 
-After refreshing:
+After refreshing the page (the request is handled by another VM in the MIG):
 
 <p align="center">
-  <img src="img/img3.png" alt="Web2" width="70%">
+  <img src="img/img3.png" alt="Website served from VM2" width="70%">
 </p>
 
 ## Notes
