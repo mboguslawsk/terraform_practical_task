@@ -82,4 +82,3 @@ After refreshing the page (the request is handled by another VM in the MIG):
 
   1. Deny all incoming traffic (`*`) by default.
   2. Allow traffic only from a specific IP range: **37.0.0.0/8**.
-
