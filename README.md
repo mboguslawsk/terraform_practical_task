@@ -58,7 +58,7 @@ load_balancer_ip = "31.32.33.34"
 * `bucket_name` → Name of the Cloud Storage bucket used for the remote Terraform state.
 * `load_balancer_ip` → Public IP address of the external HTTP load balancer.
 
-Using the provided IP address, we can connect to the website and observe the load balancer in action:
+Using the provided IP address and port 80, we can connect to the website and observe the load balancer in action:
 
 <p align="center">
   <img src="img/img2.png" alt="Website served from VM1" width="70%">
